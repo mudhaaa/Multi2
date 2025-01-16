@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Unity.Netcode;
 
-public class PlayerMovement : MonoBehaviour
+public class PlayerMovement : NetworkBehaviour
 {
     Vector3 m_Movement;
     Animator m_Animator;
@@ -11,6 +12,16 @@ public class PlayerMovement : MonoBehaviour
     Quaternion m_Rotation = Quaternion.identity;
     Rigidbody m_Rigidbody;
 
+    public NetworkVariable<Vector3> Position = new NetworkVariable<Vector3>();
+
+    public override void OnNetworkSpawn()
+    {
+        base.OnNetworkSpawn();
+        if(IsOwner)
+        {
+            transform.position = new Vector3(-9.8f, 0f, -3f);
+        }
+    }
 
     // Start is called before the first frame update
     void Start()
